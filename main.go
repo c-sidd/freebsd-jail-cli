@@ -6,11 +6,16 @@ import (
 	"os/exec"
 )
 
+// helper to run system commands
 func runCommand(name string, args ...string) {
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Run()
+	cmd.Stdin = os.Stdin
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
 }
 
 func main() {
@@ -46,16 +51,27 @@ func main() {
 }
 `, jailName, jailPath, jailName)
 
-		f, _ := os.OpenFile("/etc/jail.conf", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		f, err := os.OpenFile("/etc/jail.conf", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Println("Error opening jail.conf:", err)
+			return
+		}
 		defer f.Close()
-		f.WriteString(config)
 
-		fmt.Println("Jail created:", jailName)
+		_, err = f.WriteString(config)
+		if err != nil {
+			fmt.Println("Error writing config:", err)
+			return
+		}
+
+		fmt.Println("Jail created successfully:", jailName)
 
 	case "start":
+		fmt.Println("Starting jails...")
 		runCommand("service", "jail", "start")
 
 	case "stop":
+		fmt.Println("Stopping jails...")
 		runCommand("service", "jail", "stop")
 
 	case "ps":
@@ -66,7 +82,16 @@ func main() {
 			fmt.Println("Usage: bsdctl exec <jailname>")
 			return
 		}
-		runCommand("jexec", os.Args[2], "sh")
+
+		cmd := exec.Command("jexec", os.Args[2], "sh")
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Error:", err)
+		}
 
 	default:
 		fmt.Println("Unknown command")
