@@ -18,4 +18,14 @@ func main() {
 		cmd.Stderr = os.Stderr
 		cmd.Run()
 	}
+	config := fmt.Sprintf(`
+%s {
+    path = %s;
+    mount.devfs;
+    exec.start = "/bin/sh /etc/rc";
+    exex.stop = "/bin/sh /etc/rc.shutdown";
+    host.hostname = "%s";
+    ip4.addr = 127.0.0.2;
+}
+`, jailName, jailPath, jailName)
 }
