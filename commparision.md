@@ -1,32 +1,66 @@
-## ⚠️ Drawbacks in Existing Tools and How Proposed CLI Addresses Them
+## 📊 Unified Comparison of FreeBSD Jail Tools
 
-| Drawback / Limitation | Existing Tools (iocage, BastilleBSD, CBSD) | runj | How Proposed CLI Solves It |
-|----------------------|--------------------------------------------|------|----------------------------|
-| Multiple manual steps for basic setup | Requires separate commands for filesystem, config, start, and access | Low-level, no automation | ✅ Single command (`bsdctl create`) automates full setup |
-| Complex and inconsistent CLI syntax | Different tools use different commands and flags | Not user-friendly | ✅ Unified and simple CLI (`create`, `ps`, `exec`) |
-| High learning curve | Requires understanding jail internals and tool-specific workflows | Requires OCI knowledge | ✅ Minimal commands, easy for beginners |
-| Not developer-focused | Designed mainly for system administration | Runtime only | ✅ Designed for developer workflows and quick usage |
-| Lack of container-like experience | No simple “run and use” workflow | No high-level interface | ✅ Moves toward Docker-like workflow |
-| Hard to quickly prototype environments | Setup takes time and multiple steps | Manual setup required | ✅ Fast environment creation in seconds |
-| Heavy reliance on shell scripts | Hard to maintain and extend | Not applicable | ✅ Written in Go → better structure and maintainability |
-| Inconsistent output and automation difficulty | Different tools produce different outputs | Low-level only | ✅ Clean and predictable CLI output |
-| No abstraction layer over jails | Direct exposure to low-level details | Low-level runtime | ✅ Provides clean abstraction over jail operations |
-| Limited onboarding experience | Beginners struggle to start quickly | Not beginner-friendly | ✅ Focus on simplicity and quick start |
+The following table compares existing tools and highlights practical differences in features, usability, and workflows.
+
+| Feature / Aspect | iocage | BastilleBSD | CBSD | runj | Proposed CLI (bsdctl) |
+|------------------|--------|------------|------|------|------------------------|
+| **Primary Purpose** | Jail manager | Jail manager | Virtualization suite | OCI runtime | Developer-focused CLI |
+| **Target Users** | Sysadmins | Sysadmins | Advanced users | Low-level users | Developers |
+| **Jail Creation (Commands)** | `iocage create -r 14.0-RELEASE -n myjail ip4_addr="lo1\|127.0.0.2"` | `bastille create myjail 14.0-RELEASE 127.0.0.2` | `cbsd jcreate jname=myjail` | Manual OCI setup | `bsdctl create myjail` |
+| **Start/Stop Jails** | `iocage start myjail` | `bastille start myjail` | `cbsd jstart jname=myjail` | `runj start` | `bsdctl start / stop` |
+| **Access Jail Shell** | `iocage console myjail` | `bastille console myjail` | `cbsd jlogin jname=myjail` | Not direct | `bsdctl exec myjail` |
+| **List Jails** | `iocage list` | `bastille list` | `cbsd jls` | Not provided | `bsdctl ps` |
+| **Automation of Setup** | ❌ Partial | ❌ Partial | ❌ | ❌ | ✅ Full (filesystem + config) |
+| **Command Simplicity** | ❌ Complex flags | ⚠️ Moderate | ❌ Complex | ❌ Low-level | ✅ Very simple |
+| **Consistency of CLI** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Developer-Friendly Workflow** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Container-like UX** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Learning Curve** | High | Medium | High | High | Low |
+| **Maintainability (Codebase)** | Shell-heavy | Shell-heavy | Mixed | Structured | Go-based (clean) |
 
 ---
 
-## 🎯 Summary
+## ⚠️ Key Drawbacks in Existing Tools
 
-Existing tools are powerful but:
-
+- Require multiple steps for simple tasks  
 - Focus more on system administration than developer experience  
-- Require multiple steps and deeper system knowledge  
-- Lack a consistent and minimal interface  
+- Inconsistent command syntax across tools  
+- Lack of a minimal and unified CLI  
+- No direct container-like workflow  
+- Heavy reliance on shell scripting (hard to maintain at scale)  
 
-The proposed CLI focuses on:
+---
 
-- Simplifying workflows  
-- Reducing setup complexity  
-- Providing a clean, consistent developer experience  
+## ✅ How Proposed CLI Addresses These Issues
 
-👉 The goal is not to replace existing tools, but to **make FreeBSD jails more accessible and easier to use**.
+- Provides **single-command workflows** (e.g., `bsdctl create`)  
+- Offers **consistent and predictable CLI design**  
+- Focuses on **developer usability and quick setup**  
+- Reduces manual configuration steps  
+- Moves toward a **container-like experience on top of jails**  
+- Built in Go for **better structure and maintainability**  
+
+---
+
+## 🚀 Example Workflow Comparison
+
+### Existing Workflow
+
+```bash
+mkdir /usr/jails/test
+tar -xf base.txz -C /usr/jails/test
+nano /etc/jail.conf
+service jail start
+jexec test sh
+```
+
+---
+
+### Proposed Workflow
+
+```bash
+bsdctl create test
+bsdctl exec test
+```
+
+👉 Simplified, faster, and more intuitive.
