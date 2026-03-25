@@ -18,7 +18,7 @@ The following table compares existing tools and highlights practical differences
 | **Learning Curve** | High | Medium | High | High | Low |
 | **Maintainability (Codebase)** | Shell-heavy | Shell-heavy | Mixed | Structured | Go-based (clean) |
 
-## ⚠️ Key Drawbacks in Existing Tools
+##  Key Drawbacks in Existing Tools
 
 - Require multiple steps for simple tasks  
 - Focus more on system administration than developer experience  
