@@ -1,4 +1,4 @@
-## 📊 Unified Comparison of FreeBSD Jail Tools
+##  Unified Comparison of FreeBSD Jail Tools
 
 The following table compares existing tools and highlights practical differences in features, usability, and workflows.
 
@@ -10,15 +10,13 @@ The following table compares existing tools and highlights practical differences
 | **Start/Stop Jails** | `iocage start myjail` | `bastille start myjail` | `cbsd jstart jname=myjail` | `runj start` | `bsdctl start / stop` |
 | **Access Jail Shell** | `iocage console myjail` | `bastille console myjail` | `cbsd jlogin jname=myjail` | Not direct | `bsdctl exec myjail` |
 | **List Jails** | `iocage list` | `bastille list` | `cbsd jls` | Not provided | `bsdctl ps` |
-| **Automation of Setup** | ❌ Partial | ❌ Partial | ❌ | ❌ | ✅ Full (filesystem + config) |
-| **Command Simplicity** | ❌ Complex flags | ⚠️ Moderate | ❌ Complex | ❌ Low-level | ✅ Very simple |
-| **Consistency of CLI** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Developer-Friendly Workflow** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Container-like UX** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Automation of Setup** | Partial | Partial | No | No | Full (filesystem + config) |
+| **Command Simplicity** | Complex (flag-based) | Moderate | Complex | Low-level | Simple and minimal |
+| **Consistency of CLI** | Inconsistent | Inconsistent | Inconsistent | Inconsistent | Consistent |
+| **Developer-Friendly Workflow** | Limited | Limited | Limited | Not applicable | Strong |
+| **Container-like UX** | Not available | Not available | Not available | Not available | Supported |
 | **Learning Curve** | High | Medium | High | High | Low |
 | **Maintainability (Codebase)** | Shell-heavy | Shell-heavy | Mixed | Structured | Go-based (clean) |
-
----
 
 ## ⚠️ Key Drawbacks in Existing Tools
 
@@ -31,7 +29,7 @@ The following table compares existing tools and highlights practical differences
 
 ---
 
-## ✅ How Proposed CLI Addresses These Issues
+##  How Proposed CLI Addresses These Issues
 
 - Provides **single-command workflows** (e.g., `bsdctl create`)  
 - Offers **consistent and predictable CLI design**  
@@ -42,7 +40,7 @@ The following table compares existing tools and highlights practical differences
 
 ---
 
-## 🚀 Example Workflow Comparison
+##  Example Workflow Comparison
 
 ### Existing Workflow
 
@@ -63,4 +61,4 @@ bsdctl create test
 bsdctl exec test
 ```
 
-👉 Simplified, faster, and more intuitive.
+ Simplified, faster, and more intuitive.
